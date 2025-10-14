@@ -1,0 +1,74 @@
+.root {
+    -fx-font-family: 'SansSerif';
+    -fx-background-color: #F3E5F5;
+}
+
+.header-pane {
+    -fx-background-color: #9C27B0;
+    -fx-padding: 15;
+}
+
+.header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-color: #AB47BC;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #7B1FA2;
+}
+
+.text-field {
+    -fx-background-radius: 20px;
+    -fx-border-color: #E1BEE7;
+    -fx-border-radius: 20px;
+    -fx-prompt-text-fill: #AAAAAA;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #9C27B0;
+    -fx-border-width: 2px;
+}
+
+.text-area {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E1BEE7;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.text-area .content {
+    -fx-background-color: #FFFFFF; /* Ensures text area background is white */
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.chat-pane {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-color: #FFFFFF;
+}
+
+.input-pane {
+    -fx-background-color: #F3E5F5;
+    -fx-border-color: #E1BEE7 transparent transparent transparent;
+    -fx-border-width: 1px;
+}
+
+.log-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-fill: #6a6a6a;
+    -fx-padding: 0 0 5px 0;
+}
