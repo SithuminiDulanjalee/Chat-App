@@ -5,13 +5,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 
 public class ClientController implements Initializable {
@@ -19,6 +22,7 @@ public class ClientController implements Initializable {
     public ScrollPane scrollPane;
     public JFXTextArea textArea;
     public TextField messageField;
+    public ImageView imageView;
 
     Socket socket;
     DataInputStream dataInputStream;
@@ -41,15 +45,47 @@ public class ClientController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         new Thread(() -> {
             try {
-                socket = new Socket("localhost",4000);
+                socket = new Socket("192.168.43.130",3000);
+
                 dataInputStream = new DataInputStream(socket.getInputStream());
-                while (true){
+                while (!message.equals("exit")){
                     message=dataInputStream.readUTF();
+                    if (message.equals("IMAGE")) {
+                        int length=dataInputStream.readInt();
+                        byte[] imageBytes=new byte[length];
+                        dataInputStream.readFully(imageBytes);
+                        ByteArrayInputStream bais=
+                                new ByteArrayInputStream(imageBytes);
+                        Image image=new Image(bais);
+                        imageView.setImage(image);
+                    }
                     textArea.appendText("Server :"+message+"\n");
+//                    Process process = Runtime.getRuntime().exec(new String[]{"cmd.exe","/c",message});
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }).start();
+    }
+
+    public void sendFileOnAction(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        File file=fileChooser.showOpenDialog(new Stage());
+        if (file!=null){
+            try {
+                byte[] imageBytes=
+                        Files.readAllBytes(file.toPath());
+                dataOutputStream=new DataOutputStream(socket.getOutputStream());
+                dataOutputStream.writeUTF("IMAGE");
+                dataOutputStream.writeInt(imageBytes.length);
+                dataOutputStream.write(imageBytes);
+                dataOutputStream.flush();
+                textArea.appendText(file.getName()+"\n");
+                textArea.appendText(file.getAbsolutePath()+"\n");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 }
